@@ -6,14 +6,18 @@ import {
 } from '@nestjs/websockets';
 import { ChatService } from './chat.service';
 
-import { OnModuleInit } from '@nestjs/common';
+import { OnModuleInit, UseGuards } from '@nestjs/common';
 import { Server } from 'socket.io';
+import { WsAuthGuard } from 'src/auth/auth.guard';
+
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
+
+
 export class ChatGateway implements OnModuleInit {
   constructor(private readonly chatService: ChatService) {}
 
@@ -26,7 +30,7 @@ export class ChatGateway implements OnModuleInit {
       console.log('Socket connectyed');
     });
   }
-
+  @UseGuards(WsAuthGuard)
   @SubscribeMessage('newMessage')
   onNewMessage(@MessageBody() message: any) {
     console.log(message);

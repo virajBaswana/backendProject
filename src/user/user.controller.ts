@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { HttpAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 
 @Controller('user')
@@ -23,7 +23,7 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @UseGuards(HttpAuthGuard)
   findAll(@Req() req: Request) {
     console.log(req.user);
     return this.userService.findAll();
